@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- *  Contains \Drupal\node_duplicate\Plugin\Action\DuplicateNodeAction
- */
-
 namespace Drupal\node_duplicate\Plugin\Action;
 
 
@@ -25,7 +20,13 @@ use Drupal\filter\Render\FilteredMarkup;
 class DuplicateNodeAction extends ActionBase {
 
   /**
-   * {@inheritdoc}
+   * Duplicates a node.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   Node to duplicate.
+   *
+   * @return \Drupal\node\NodeInterface
+   *   Duplicated node.
    */
   public function execute($entity = NULL) {
     $duplicated_entity = $entity->createDuplicate();
@@ -48,6 +49,7 @@ class DuplicateNodeAction extends ActionBase {
 
     $duplicated_entity->status = NODE_NOT_PUBLISHED;
     $duplicated_entity->save();
+    return $duplicated_entity;
   }
 
   /**
