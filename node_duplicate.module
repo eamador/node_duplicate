@@ -1,0 +1,27 @@
+<?php
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_operation().
+ */
+function node_duplicate_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+  $operations = [];
+
+  if ($entity instanceof \Drupal\node\NodeInterface) {
+    /** @var \Drupal\node_duplicate\Plugin\Action\DuplicateNodeAction $action */
+    $action = \Drupal::entityTypeManager()
+      ->getStorage('action')
+      ->load('node_duplicate_action')
+      ->getPlugin();
+    if ($action->access($entity)) {
+      $operations['node_duplicate_action'] = [
+        'title' => t('Duplicate'),
+        'url' => Url::fromRoute('node_duplicate.duplicate', ['node' => $entity->id()]),
+        'weight' => 60,
+      ];
+    }
+  }
+
+  return $operations;
+}
